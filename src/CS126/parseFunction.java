@@ -1,4 +1,4 @@
-
+package CS126;
 
 import java.io.*;
 import java.util.*;
@@ -13,7 +13,7 @@ public class parseFunction {
         Gson gson = new Gson();
         // 1. JSON to Java object, read it from a file.
         List<movieData> movieList = new ArrayList<movieData>();
-        movieList = gson.fromJson(new FileReader("apiData.json"), new TypeToken<List<movieData>>(){}.getType());
+        movieList = gson.fromJson(new FileReader("CS126/apiData.json"), new TypeToken<List<movieData>>(){}.getType());
         return movieList;
 
     }
