@@ -1,23 +1,75 @@
-/**
- * Created by Museum2015 on 4/9/2016.
- */
 
-import java.io.InputStreamReader;
-import java.net.URL;
+
+import java.io.*;
+import java.util.*;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class parseFunction {
 
-    public static void main(String args) throws Exception {
+    public List<movieData> parseFromJson()throws Exception {
 
-        URL url = new URL("https://api.themoviedb.org/3/movie/popular?api_key=21e3d0475313167452c6fa005259b480");
-        InputStreamReader reader = new InputStreamReader(url.openStream());
-        movieData movies = new Gson().fromJson(reader, movieData.class);
-
-        System.out.println(movies.title);
+        Gson gson = new Gson();
+        // 1. JSON to Java object, read it from a file.
+        List<movieData> movieList = new ArrayList<movieData>();
+        movieList = gson.fromJson(new FileReader("apiData.json"), new TypeToken<List<movieData>>(){}.getType());
+        return movieList;
 
     }
+
+    public void printAll(List<movieData> movies){
+
+        for (int x=0; x< movies.size(); x++)
+        {
+            System.out.println(movies.get(x).title);
+        }
+
+    }
+
+    public void printAllWithGenre(List<movieData> movies, int genreId){
+
+        for (int x=0; x< movies.size(); x++)
+        {
+            movieData currentMovie = movies.get(x);
+            for (int y=0; y<currentMovie.genre_ids.length-1; y++)
+            {
+                if (currentMovie.genre_ids[y] == genreId)
+                {
+                    System.out.println(currentMovie.getTitle());
+                }
+            }
+        }
+
+    }
+
+    public void printAllWithAverage(List<movieData> movies, double minVoteAverage)
+    {
+
+        for (int x=0; x<movies.size(); x++){
+            movieData currentMovie = movies.get(x);
+            double currentVoteAverage = currentMovie.getVote_average();
+            if (currentVoteAverage > minVoteAverage)
+            {
+                System.out.println(currentMovie.getTitle());
+            }
+        }
+    }
+
+    public void printAllWithPopularity(List<movieData> movies, double minPopularity)
+    {
+
+        for (int x=0; x<movies.size(); x++){
+            movieData currentMovie = movies.get(x);
+            double currentPopularity = currentMovie.getPopularity();
+            if (currentPopularity > minPopularity)
+            {
+                System.out.println(currentMovie.getTitle());
+            }
+        }
+    }
+
+
 
     public class movieData {
         private String poster_path;
